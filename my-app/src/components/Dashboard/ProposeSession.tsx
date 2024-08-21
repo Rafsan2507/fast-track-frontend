@@ -10,7 +10,7 @@ function ProposeSession({ setProposeButton }: props) {
       <div className="p-2 border-b-2 border-[#3f4146]">Proposed Sessions</div>
 
       <div className="flex justify-between items-center p-4 border-solid rounded-lg bg-[#2f3033] m-4">
-        <p className="">You currently have no proposed sessions</p>
+    
 
         <button
           onClick={() => setProposeButton(true)}

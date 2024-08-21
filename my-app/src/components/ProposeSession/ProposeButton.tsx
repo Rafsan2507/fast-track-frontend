@@ -20,6 +20,11 @@ import {
 } from '@/components/ui/select';
 import moment, { Moment } from 'moment-timezone';
 import { DatePickerForm } from './DatePickerPropose';
+import { proposeSlot, ProposeSlots } from '@/services/sessionServices';
+
+interface Props {
+  setProposeData: React.Dispatch<React.SetStateAction<ProposeSlots[]>>;
+}
 
 export interface SlotInterface {
   date?: Date;
@@ -27,7 +32,7 @@ export interface SlotInterface {
   endTime?: string;
 }
 
-export function ProposeButton() {
+export function ProposeButton({ setProposeData }: Props) {
   const timezones = moment.tz.names().map((tz) => {
     const offset = moment.tz(tz).format('Z');
     return {
@@ -44,6 +49,25 @@ export function ProposeButton() {
   const [slots, setSlots] = useState<SlotInterface[]>([{}]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTimezone, setSelectedTimezone] = useState('');
+
+  const handleSubmit = async () => {
+    const data = {
+      timezone: selectedTimezone,
+      startTime: slots.map((el) => {
+        const parsedStartTime = moment(el.startTime, 'HH:mm');
+        return moment(el.date)
+          .set({
+            hour: parsedStartTime.hour(),
+            minute: parsedStartTime.minute(),
+          })
+          .toISOString();
+      }),
+    };
+    const proposedData = await proposeSlot(data);
+
+    setProposeData((prevData: ProposeSlots[]) => [...prevData, proposedData]);
+    setIsOpen(false)
+  };
 
   const addSlot = () => {
     setSlots([...slots, {}]);
@@ -186,7 +210,7 @@ export function ProposeButton() {
           <Button onClick={addSlot} className='text-white bg-[#292b2e] border-none'>Add another session</Button>
         </div>
         <DialogFooter>
-          <Button type="submit" className='bg-[#3dd7a1] text-[#000000]'>Save</Button>
+          <Button type="submit" className='bg-[#3dd7a1] text-[#000000]' onClick={handleSubmit}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
