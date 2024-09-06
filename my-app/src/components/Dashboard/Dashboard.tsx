@@ -16,6 +16,7 @@ import Filter from './Filter';
 import ProposeSession from './ProposeSession';
 import { getProposedSessions, getUsersWithSessions, ProposeSlots } from '@/services/sessionServices';
 import moment from 'moment-timezone';
+import { useRouter } from "next/navigation";
 
 function Dashboard() {
   const currentPath = usePathname();
@@ -27,6 +28,8 @@ function Dashboard() {
 
   const [usersWithSessions, setUsersWithSessions] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+
+  const router = useRouter();
 
   const fetchUsersWithSessions = async () => {
     try {
@@ -79,8 +82,8 @@ function Dashboard() {
     }
   }, [usersWithSessions]);
 
-  const handleBookSession = (userId: number) => {
-    console.log("Booking session for user:", userId);
+  const handleBookSession = (id: number) => {
+    router.push(`/dashboard/profile/${id}`);
   };
 
 
@@ -133,11 +136,11 @@ function Dashboard() {
             </div>
 
             <div className="w-screen flex flex-col gap-4 ">
-              <ProposeSession setProposeButton={setProposeButton} />
-              
-              <div className="p-2 flex justify-between border-b-2 border-[#3f4146]">
-                <p>Book Session</p>
-                <p>{filteredUsers.length} Available sessions</p>
+                          
+              <div className="p-2 flex justify-between border-b-2 border-[#3f4146] items-center">
+                <p>You have {filteredUsers.length} availabilities</p>
+
+                <ProposeSession setProposeButton={setProposeButton} />
               </div>
               {filteredUsers.length > 0 && (
                   <div className="user-list w-[20vw] ml-[1vw]">
@@ -150,11 +153,11 @@ function Dashboard() {
 
                           <div className="w-fit flex items-center">
                             <Button
-                              className="bg-[#3dd7a1] text-black"
+                              className="bg-[#3dd7a1] text-black font-medium"
                               variant="default"
-                              onClick={() => handleBookSession(user.userId)}
+                              onClick={() => handleBookSession(user.id)}
                             >
-                              Book
+                              Book Session
                             </Button>
                           </div>
                         </div>

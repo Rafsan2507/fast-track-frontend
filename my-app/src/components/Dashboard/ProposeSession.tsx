@@ -7,16 +7,12 @@ type props = {
 function ProposeSession({ setProposeButton }: props) {
   return (
     <div className="">
-      <div className="p-2 border-b-2 border-[#3f4146]">Proposed Sessions</div>
-
-      <div className="flex justify-between items-center p-4 border-solid rounded-lg bg-[#2f3033] m-4">
-    
-
+      <div className="flex justify-between items-center border-solid rounded-lg bg-[#2f3033]">
         <button
           onClick={() => setProposeButton(true)}
-          className="bg-[#3dd7a1] text-black rounded-lg p-2 flex items-center justify-center gap-2"
+          className="bg-[#3dd7a1] text-black font-medium rounded-lg p-2 flex items-center justify-center gap-2"
         >
-          <FaPen /> propose session
+         Propose Session
         </button>
       </div>
     </div>
